@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        function getLocation() {
+            if (navigator.permissions) {
+                navigator.permissions.query({name:'geolocation'}).then(function(permissionStatus) {
+                    if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
+                        navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true, maximumAge: 0, timeout: 5000});
+                    } else {
+                        alert("Geolocation permission denied.");
+                    }
+                });
+            } else if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true, maximumAge: 0, timeout: 5000});
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+        
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var google_earth_url = "https://earth.google.com/web/search/" + latitude + "," + longitude;
+            window.location.href = google_earth_url;
+        }
+
+        function showError(error) {
+            alert("An error occurred while retrieving your location: " + error.message);
+        }
+    </script>
+</head>
+<body onload="getLocation()">
+</body>
+</html>
